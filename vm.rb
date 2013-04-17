@@ -1,3 +1,5 @@
+debug = (ARGV[0] == 'debug')
+
 file = File.new 'challenge.bin', 'rb'
 
 memory = Array.new
@@ -15,12 +17,18 @@ while position < total_size
   data = memory[position]
   case data
   when 0
-    p 'halt'
+    p 'halt' if debug
     break
   when 19
-    p 'out'
+    p 'out' if debug
+    position = position + 1
+    character = memory[position]
+    p character if debug
+    print character.chr
   when 21
-    p 'no-op'
+    p 'no-op' if debug
+    position = position + 1
+    next
   end
   position += 1
 end
