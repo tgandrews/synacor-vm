@@ -1,3 +1,5 @@
+require './lib/vm.rb'
+
 debug = (ARGV[0] == 'debug')
 
 file = File.new 'challenge.bin', 'rb'
@@ -11,24 +13,7 @@ while packed_data = file.read(2)
   memory << data
 end
 
-position = 0
-total_size = memory.length
-while position < total_size
-  data = memory[position]
-  case data
-  when 0
-    p 'halt' if debug
-    break
-  when 19
-    p 'out' if debug
-    position = position + 1
-    character = memory[position]
-    p character if debug
-    print character.chr
-  when 21
-    p 'no-op' if debug
-    position = position + 1
-    next
-  end
-  position += 1
-end
+vm = SynacorVM::Engine.new(memory, debug)
+vm.run
+
+puts ''
