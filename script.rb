@@ -13,7 +13,7 @@ while packed_data = file.read(2)
   memory << data
 end
 
-vm = SynacorVM::Engine.new(memory, debug)
+vm = SynacorVM::Engine.new(memory: memory, debug: debug)
 vm.run
 
 puts ''

@@ -1,7 +1,7 @@
 class SynacorVM::Engine
-  attr_accessor :memory, :registers
+  attr_accessor :memory, :registers, :position
   
-  def initialize(memory, debug)
+  def initialize(memory: [], debug: false)
     @memory = memory
     @registers = Array.new 8
     @debug = debug
@@ -13,17 +13,17 @@ class SynacorVM::Engine
     while @position < end_of_memory
       data = memory[@position]
       case data
-      when 0
+      when SynacorVM::HALT
         p 'halt' if @debug
         break
-      when 19
+      when SynacorVM::OUT
         p 'out' if @debug
         @position = @position + 1
         character = memory[@position]
         p character if @debug
         p character.chr if @debug
         print character.chr
-      when 21
+      when SynacorVM::NOOP
         p 'no-op' if @debug
         @position = @position + 1
         next
