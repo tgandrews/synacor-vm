@@ -8,14 +8,25 @@ class SynacorVM::Engine
     @position = 0
   end
   
-  def run
-    end_of_memory = @memory.length
+  def run (no_of_steps: 0)
+    if no_of_steps == 0
+      end_of_memory = @memory.length
+    else
+      end_of_memory = no_of_steps
+    end
+
     while @position < end_of_memory
       data = memory[@position]
       case data
       when SynacorVM::HALT
         p 'halt' if @debug
         break
+      when SynacorVM::JMP
+        p 'jmp' if @debug
+        @jmpTo = memory[@position + 1]
+        p 'new position ' + @jmpTo.to_s if @debug
+        @position = @jmpTo
+        next
       when SynacorVM::OUT
         p 'out' if @debug
         @position = @position + 1
